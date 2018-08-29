@@ -129,10 +129,10 @@ def breath_first_search(problem, que, type = 'breath_first_search', heuristic = 
                 action = sub_state[1]
                 cost = sub_state[2]
 
-                new_path = curret_state[1] + [action]
+                new_action = curret_state[1] + [action]
                 new_cost = curret_state[2] + cost
 
-                new_state = (node, new_path, new_cost)
+                new_state = (node, new_action, new_cost)
                 if type is 'breath_first_search':
                     que.push(new_state)
                 elif type is 'uniformCostSearch':

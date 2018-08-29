@@ -370,12 +370,35 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
+    position = state[0]
+    remainingCorners = list(state[1])
+
+    total = 0
+    while len(remainingCorners) > 0:
+        minD = 999999
+        for corner in remainingCorners:
+            distance = util.manhattanDistance(position, corner)
+            if distance < minD:
+                minD = distance
+                temp = corner
+        position = temp
+        remainingCorners.remove(temp)
+        total += minD
+
+
+    return total
+
+    visited = set()
+
     corners_state = list(state[1])
+    current_node = state[0]
     total = 0
     while any(corners_state):
-        min_tuple = min([(util.manhattanDistance(state[0], corner),corner) for corner in corners_state])
+        visited.add(corners_state)
+        min_tuple = min([(util.manhattanDistance(current_node, corner),corner) for corner in corners_state])
+        current_node = min_tuple[1]
         total += min_tuple[0]
-        corners_state.remove(min_tuple[1])
+        corners_state.remove(current_node)
 
     return total
 
@@ -511,7 +534,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        return search.uniformCostSearch(problem)
+        return search.breadthFirstSearch(problem)
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -546,7 +569,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-        return self.food[x][y]
+        return state in self.food.asList()
 
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
