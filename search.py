@@ -114,7 +114,7 @@ def breath_first_search(problem, que, type = 'breath_first_search', heuristic = 
     elif type is 'uniformCostSearch':
         que.push(init_state, 0)
     elif type is 'aStarSearch':
-        cost = init_state[2] + heuristic(init_state[0], problem)
+        cost = init_state[2] + 0
         que.push(init_state, cost)
 
     while not que.isEmpty():
@@ -138,48 +138,8 @@ def breath_first_search(problem, que, type = 'breath_first_search', heuristic = 
                 elif type is 'uniformCostSearch':
                     que.push(new_state, new_cost)
                 elif type is 'aStarSearch':
-                    cost = new_state[2] + heuristic(init_state[0], problem)
+                    cost = new_state[2] + heuristic(node, problem)
                     que.push(new_state, cost)
-
-def search(problem, que, type):
-    visited_node = set()
-    init_state = (problem.getStartState(), ['Stop'], 0)
-    if type is 'uniformCostSearch':
-        cost = init_state[2]
-
-def generic_search_1(problem, fringe, push_into_fringe):
-
-    visited = set()
-    # state model is (node, path, cost)
-    start_state = (problem.getStartState(), ['Stop'], 0)
-    push_into_fringe(fringe, start_state)
-
-    if problem.isGoalState(problem.getStartState()):
-        return 'Stop'
-
-    while not fringe.isEmpty():
-        current_state = fringe.pop()
-        current_node = current_state[0]
-        current_path = current_state[1]
-        current_cost = current_state[2]
-
-        if problem.isGoalState(current_node):
-            current_path.remove(current_path[0])
-            return current_path
-
-        if current_node not in visited:
-            visited.add(current_node)
-            for successor in problem.getSuccessors(current_node):
-                child_node = successor[0]
-                child_action = successor[1]
-                child_cost = successor[2]
-
-                new_path = current_path + [child_action]
-                new_cost = current_cost + child_cost
-
-                new_state = (child_node, new_path, new_cost)
-                push_into_fringe(fringe, new_state)
-
 
 def depthFirstSearch(problem):
     """
@@ -226,6 +186,7 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    # return genericSearch(problem, util.PriorityQueue(), heuristic)
     return breath_first_search(problem, util.PriorityQueue(), 'aStarSearch', heuristic)
     util.raiseNotDefined()
 
